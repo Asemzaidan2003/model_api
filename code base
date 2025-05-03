@@ -1,0 +1,16 @@
+/model-api
+│
+├── app/
+│   ├── __init__.py
+│   ├── main.py              # Entrypoint
+│   ├── routes/
+│   │   └── predict.py       # Prediction route
+│   ├── services/
+│   │   └── model_loader.py  # Model + inference logic
+│   └── utils/
+│       └── preprocess.py    # Image handling logic
+│
+├── requirements.txt
+└── saved_models/         # Trained model
+    ├── model_label.pth ...           # Model files
+    ├── label_encoders.pkl  ...         
