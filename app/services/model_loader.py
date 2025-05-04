@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import models ,transforms
-from app.utils.preprocess import load_image_from_url, load_image_from_upload
+from app.utils.preprocess import load_image_from_url
 import joblib
 
 warnings.filterwarnings("ignore")
@@ -64,6 +64,7 @@ class SingleOutputResNet(nn.Module):
 
 
 def preprocess_image(image):
+    print("Preprocessing image")
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
@@ -76,6 +77,7 @@ def preprocess_image(image):
 
 
 def predict_single_label(image, label_name):
+    print(f"Predicting label: {label_name}")
     model_path = os.path.join(saved_models_dir, f'model_{label_name}.pth')
     encoder_path = os.path.join(saved_models_dir, f'label_encoder_{label_name}.pkl')
 
@@ -105,19 +107,10 @@ def predict_single_label(image, label_name):
     return pred_label
 
 def predict_image_from_url(url):
+    print("Predicting from URL")
     image = load_image_from_url(url)
     if image is None:
         raise ValueError("Invalid image URL")
-    predictions = {}
-    for label_name in ready_labels:
-        pred_label = predict_single_label(image, label_name)
-        predictions[label_name] = pred_label
-    return predictions
-
-def predict_image_from_file(file):
-    image = load_image_from_upload(file)
-    if image is None:
-        raise ValueError("Invalid image file")
     predictions = {}
     for label_name in ready_labels:
         pred_label = predict_single_label(image, label_name)
