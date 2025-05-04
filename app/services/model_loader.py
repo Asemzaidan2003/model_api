@@ -7,7 +7,7 @@ from torchvision import models ,transforms
 from app.utils.preprocess import load_image_from_url
 import joblib
 
-warnings.filterwarnings("ignore")
+# warnings.filterwarnings("ignore")
 
 # Device Setup
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

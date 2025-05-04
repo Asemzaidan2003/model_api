@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException, Depends, Header
+from fastapi import APIRouter, HTTPException, Depends, Header
 from pydantic import BaseModel
 from app.services.model_loader import predict_image_from_url
 import os
@@ -16,7 +16,7 @@ def check_api_key(req_api_key: str = Header(...)):
         print("API key is None")
         raise HTTPException(status_code=403, detail="no key !")
     if req_api_key != api_key:
-        raise HTTPException(status_code=403, detail="Unauthorized")
+        raise HTTPException(status_code=401, detail="Unauthorized")
 
 class ImageURL(BaseModel):
     image_url: str
