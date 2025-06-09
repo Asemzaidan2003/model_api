@@ -6,4 +6,5 @@ app = FastAPI()
 @app.get("/")
 def read_root():
     return {"message": "Hello from Render!"}
+
 app.include_router(predict_router, prefix="/predict")

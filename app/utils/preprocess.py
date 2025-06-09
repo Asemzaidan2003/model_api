@@ -22,9 +22,9 @@ def load_image_from_url(url):
         print(f"Error loading image from URL: {e}")
         return None
 
-def load_image_from_upload(file):
+def load_image_from_upload(file_bytes):
     try:
-        img = Image.open(file.file).convert("RGB")
+        img = Image.open(io.BytesIO(file_bytes)).convert("RGB")
         tensor = transform(img).unsqueeze(0)
         return tensor
     except Exception as e:

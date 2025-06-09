@@ -1,8 +1,8 @@
-from fastapi import APIRouter, HTTPException, Depends, Header
 from pydantic import BaseModel
-from app.services.model_loader import predict_image_from_url
+from app.services.model_loader import predict_image_from_url, predict_image_from_file
 import os
 from dotenv import load_dotenv
+from fastapi import APIRouter, File, UploadFile, HTTPException, Depends, Header
 
 load_dotenv()
 api_key = os.getenv("API_KEY")
@@ -31,3 +31,11 @@ async def predict_from_url(data: ImageURL):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.post("/file", dependencies=[Depends(check_api_key)])
+async def predict_from_file(file: UploadFile = File(...)):
+    try:
+        contents = await file.read()
+        result = predict_image_from_file(contents)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

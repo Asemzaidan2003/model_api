@@ -4,8 +4,11 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import models ,transforms
-from app.utils.preprocess import load_image_from_url
+from app.utils.preprocess import load_image_from_url, load_image_from_upload
 import joblib
+from PIL import Image
+import io
+
 
 # warnings.filterwarnings("ignore")
 
@@ -111,6 +114,21 @@ def predict_image_from_url(url):
     image = load_image_from_url(url)
     if image is None:
         raise ValueError("Invalid image URL")
+    predictions = {}
+    for label_name in ready_labels:
+        pred_label = predict_single_label(image, label_name)
+        predictions[label_name] = pred_label
+    return predictions
+
+
+def predict_image_from_file(file_bytes):
+    print("Predicting from file bytes")
+    
+    image = load_image_from_upload(file_bytes)
+
+    if image is None:
+        raise ValueError("Invalid image file")
+    
     predictions = {}
     for label_name in ready_labels:
         pred_label = predict_single_label(image, label_name)
